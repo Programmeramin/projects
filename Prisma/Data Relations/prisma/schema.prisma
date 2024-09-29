@@ -1,0 +1,89 @@
+
+datasource db {
+    provider = "mysql"
+    url = env("DATABASE_URL")
+}
+
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+
+model user {
+    id Int @id @default(autoincrement())
+    name String
+    email String
+    age Int
+    skill String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Post {
+    id Int @id @default(autoincrement())
+    title String
+    category CategoryOnPost[]
+    status Boolean @default(true)
+    trash Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Category {
+    id Int @id @default(autoincrement())
+    name String
+    posts CategoryOnPost[]
+    status Boolean @default(true)
+    trash Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+model CategoryOnPost {
+    post Post @relation(fields: [postId], references: [id])
+    postId Int
+    category Category @relation(fields: [categoryId], references: [id]) 
+    categoryId Int
+    name String
+    status Boolean @default(true)
+    trash Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    @@id([postId, categoryId])
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+model Student {
+    id Int @id @default(autoincrement())
+    name String
+    roll Int
+    books Book?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+model Book {
+    id Int @id @default(autoincrement())
+    name String
+    author String
+    type String
+    student Student @relation(fields: [studentId], references: [id])
+    studentId Int @unique()
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
